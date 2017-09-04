@@ -1,4 +1,5 @@
 package GameBoard;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,13 +49,25 @@ public class ScoreBoard {
 		if(index!=-1){
 			this.gameEntries[index] = null;
 			Arrays.sort(this.gameEntries,comparatorByVal);
+			this.numOfEntries--;
 		}
 		else{
 			throw new Exception("Invalid runner. No such runner in ScoreBoard.");
 		}
 	}
 	
-	private int lookUpEntry(String s){
+	public void incrementGameEntryScore(String name, int score) throws Exception{
+		int index = lookUpEntry(name);
+		if(index!=-1){
+			this.gameEntries[index].incrementScore(score);;
+			Arrays.sort(this.gameEntries,comparatorByVal);
+		}
+		else{
+			throw new Exception("Invalid runner. No such runner in ScoreBoard.");
+		}
+	}
+	
+	public int lookUpEntry(String s){
 		for(int i=0; i<this.numOfEntries; i++){
 			if(this.gameEntries[i].getName().equals(s)){
 				return i;
@@ -64,20 +77,17 @@ public class ScoreBoard {
 	}
 
 	public GameEntry getRunnerInRank(int rank)throws Exception{
-		if(rank >= this.gameEntries.length){
+		if(rank > this.numOfEntries || rank<=0){
 			throw new Exception("Invalid rank. ScoreBoard doesn't contain that rank.");
 		}
-		if(gameEntries[rank] == null){
-			throw new Exception("Invalid rank. No runner in specified rank.");
-		}
-		return gameEntries[rank];
+		return gameEntries[rank-1];
 	}
 	public int getRankOfRunner(String runner)throws Exception{
 		int rank = lookUpEntry(runner);
 		if(rank==-1){
 			throw new Exception("Invalid runner. No such runner in ScoreBoard.");
 		}
-		return rank;
+		return rank+1;
 	}
 	
 	public GameEntry[] getScoreBoardEntries(){

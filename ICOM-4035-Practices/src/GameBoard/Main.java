@@ -1,4 +1,5 @@
 package GameBoard;
+
 import java.util.Scanner;
 
 import com.sun.org.apache.bcel.internal.generic.GOTO;
@@ -47,8 +48,9 @@ public class Main {
 		System.out.println("1) Show ScoreBoard");
 		System.out.println("2) Add runner");
 		System.out.println("3) Remove runner");
-		System.out.println("4) Get runner's rank");
-		System.out.println("5) Get runner in rank");
+		System.out.println("4) Edit runner score");
+		System.out.println("5) Get runner's rank");
+		System.out.println("6) Get runner in rank");
 	}
 	
 	private static void addGameEntry(){
@@ -63,24 +65,81 @@ public class Main {
 		} while (!answer.equals("yes") && !answer.equals("no"));
 		
 		if(answer.equals("yes")){
-			Boolean isNumber = false ;
 			System.out.println("Provide runner's score: ");
 			score = getNumberAnswer();
 		}
 		try {
 			scoreBoard.addGameEntry(new GameEntry(name, score));
+			System.out.println();
+			System.out.println("Added player " + name+" with "+score+" points");
 		} catch (Exception e) {
 			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 	
 	private static void removeRunner(){
 		System.out.println("Provide runner's name to kick out: ");
 		String name = input.nextLine();
-		try {
-			scoreBoard.removeGameEntry(name);
-		} catch (Exception e) {
-			System.out.println(e);
+		if(scoreBoard.lookUpEntry(name)==-1){
+			try {
+				throw new Exception("Invalid runner. No such runner in ScoreBoard.");
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+		else{
+			try {
+				scoreBoard.removeGameEntry(name);
+				System.out.println();
+				System.out.println("Removed player " + name);
+			} catch (Exception e) {
+				System.out.println(e);
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private static void changeRunnerScore(){
+		System.out.println("Provide runner's name: ");
+		String name = input.nextLine();
+		if(scoreBoard.lookUpEntry(name)==-1){
+			try {
+				throw new Exception("Invalid runner. No such runner in ScoreBoard.");
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+		else{
+			String answer;
+			int score = 0;
+			do {
+				System.out.println("Would you like to change or add to the score?  change / add");
+				answer =String.valueOf(input.nextLine().toLowerCase());
+			} while (!answer.equals("add") && !answer.equals("change"));
+			
+			if(answer.equals("change")){
+				System.out.println("Provide new runner's score: ");
+				score = getNumberAnswer();
+				try {
+					scoreBoard.addGameEntry(new GameEntry(name, score));
+					System.out.println();
+					System.out.println("Changed player " + name+"'s score to "+score);
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			}
+			else{
+				System.out.println("Provide ammount to increment runner's score by: ");
+				score = getNumberAnswer();
+				try {
+					scoreBoard.incrementGameEntryScore(name, score);
+					System.out.println();
+					System.out.println("Incremented player " + name+"'s score by "+score);
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+			}
 		}
 	}
 	
@@ -88,7 +147,8 @@ public class Main {
 		System.out.println("Provide runner's name: ");
 		String name = input.nextLine();
 		try {
-			scoreBoard.getRankOfRunner(name);
+			System.out.println();
+			System.out.println("Rank of runner " +name+ " is: "+ scoreBoard.getRankOfRunner(name));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -97,7 +157,9 @@ public class Main {
 	private static void getRunnerInRank(){
 		System.out.println("Provide rank to search: ");
 		try {
-			scoreBoard.getRunnerInRank(getNumberAnswer());
+			GameEntry ge = scoreBoard.getRunnerInRank(getNumberAnswer());
+			System.out.println();
+			System.out.println("Player "+ ge.getName() + " is in rank requested: "+ "with " + ge.getScore() + " points");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -116,9 +178,12 @@ public class Main {
 			removeRunner();
 			break;
 		case 4:
-			getRunnerRank();
+			changeRunnerScore();
 			break;
 		case 5:
+			getRunnerRank();
+			break;
+		case 6:
 			getRunnerInRank();
 			break;
 		default:
