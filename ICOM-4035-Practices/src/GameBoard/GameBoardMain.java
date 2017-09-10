@@ -2,16 +2,14 @@ package GameBoard;
 
 import java.util.Scanner;
 
-import com.sun.org.apache.bcel.internal.generic.GOTO;
-
-public class Main {
+public class GameBoardMain {
 
 	static Scanner input = new Scanner(System.in);
 	static ScoreBoard scoreBoard;
 	
 	public static void main(String[] args) {
 		System.out.println("Welcome to the ScoreBoard program.\n");
-		System.out.println("How many Runners would you like the ScoreBoard to be able to hold?");
+		System.out.println("How many players would you like the ScoreBoard to be able to hold?");
 		
 		scoreBoard = new ScoreBoard(getNumberAnswer());
 		System.out.println();
@@ -22,6 +20,9 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Method displays the ScoreBoard to the user
+	 */
 	private static void printScoreBoard(){
 		GameEntry[] gameEntries = scoreBoard.getScoreBoardEntries();
 		System.out.println();
@@ -42,19 +43,26 @@ public class Main {
 		System.out.println();
 	}
 	
+	/**
+	 * Displays the Menu for the user
+	 */
 	private static void showMenu(){
 		System.out.println();
 		System.out.println("What would you like to do?");
 		System.out.println("1) Show ScoreBoard");
-		System.out.println("2) Add runner");
-		System.out.println("3) Remove runner");
-		System.out.println("4) Edit runner score");
-		System.out.println("5) Get runner's rank");
-		System.out.println("6) Get runner in rank");
+		System.out.println("2) Add player");
+		System.out.println("3) Remove player");
+		System.out.println("4) Edit player score");
+		System.out.println("5) Get player's rank");
+		System.out.println("6) Get player in rank");
 	}
 	
+	/**
+	 * Method is used for adding a new GameEntry to the ScoreBoard
+	 * It also handles the exceptions this might cause.
+	 */
 	private static void addGameEntry(){
-		System.out.println("Provide runner's name: ");
+		System.out.println("Provide player's name: ");
 		String name = input.nextLine();
 		String answer;
 		int score = 0;
@@ -65,7 +73,7 @@ public class Main {
 		} while (!answer.equals("yes") && !answer.equals("no"));
 		
 		if(answer.equals("yes")){
-			System.out.println("Provide runner's score: ");
+			System.out.println("Provide player's score: ");
 			score = getNumberAnswer();
 		}
 		try {
@@ -78,12 +86,16 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Method is used for removing a GameEntry to the ScoreBoard
+	 * It also handles the exceptions this might cause.
+	 */
 	private static void removeRunner(){
-		System.out.println("Provide runner's name to kick out: ");
+		System.out.println("Provide player's name to kick out: ");
 		String name = input.nextLine();
 		if(scoreBoard.lookUpEntry(name)==-1){
 			try {
-				throw new Exception("Invalid runner. No such runner in ScoreBoard.");
+				throw new Exception("Invalid Player. No such player in ScoreBoard.");
 			} catch (Exception e) {
 				System.out.println(e);
 			}
@@ -100,9 +112,15 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Method is used for changing a GameEntry's score.
+	 * It also handles the exceptions this might cause.
+	 */
 	private static void changeRunnerScore(){
-		System.out.println("Provide runner's name: ");
+		System.out.println("Provide player's name: ");
 		String name = input.nextLine();
+		
+		//Checks if the ScoreBoard has the given player in it. If not, it shows an exception.
 		if(scoreBoard.lookUpEntry(name)==-1){
 			try {
 				throw new Exception("Invalid runner. No such runner in ScoreBoard.");
@@ -143,28 +161,39 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Method is used for finding out the rank of a player.
+	 * It also handles the exceptions this might cause.
+	 */
 	private static void getRunnerRank(){
-		System.out.println("Provide runner's name: ");
+		System.out.println("Provide player's name: ");
 		String name = input.nextLine();
 		try {
 			System.out.println();
-			System.out.println("Rank of runner " +name+ " is: "+ scoreBoard.getRankOfRunner(name));
+			System.out.println("Rank of player " +name+ " is: "+ scoreBoard.getRankOfRunner(name));
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 	
+	/**
+	 * Method is used for finding out the player in the specified rank. 
+	 * It also handles the exceptions this might cause.
+	 */
 	private static void getRunnerInRank(){
 		System.out.println("Provide rank to search: ");
 		try {
 			GameEntry ge = scoreBoard.getRunnerInRank(getNumberAnswer());
 			System.out.println();
-			System.out.println("Player "+ ge.getName() + " is in rank requested: "+ "with " + ge.getScore() + " points");
+			System.out.println("Player "+ ge.getName() + " is in rank requested with " + ge.getScore() + " points");
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 	
+	/**
+	 * Method is used for selecting an option provided in the menu. 
+	 */
 	private static void menuSelector(){
 		int answer= getNumberAnswer();
 		switch (answer) {
@@ -192,6 +221,10 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * Method is used for receiving an integer answer from the user.
+	 * @return answer of user
+	 */
 	private static int getNumberAnswer(){
 		int answer=0;
 		Boolean isNumber = false ;
@@ -201,8 +234,8 @@ public class Main {
 				isNumber =true;
 			}
 			catch(NumberFormatException e){
-				System.out.println("Nope, that's not a number.");
-				System.out.println("Provide a number answer.");
+				System.out.println("Nope, that's not a number/integer.");
+				System.out.println("Provide an integer answer.");
 				System.out.println();
 				isNumber = false;
 			}
