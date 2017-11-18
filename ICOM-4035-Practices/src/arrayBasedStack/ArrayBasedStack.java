@@ -1,8 +1,6 @@
 
 package arrayBasedStack;
 
-import java.util.Arrays;
-
 public class ArrayBasedStack<E> implements Stack<E> {
 
 	private int topPointer;
@@ -10,7 +8,7 @@ public class ArrayBasedStack<E> implements Stack<E> {
 	
 	@SuppressWarnings("unchecked")
 	public ArrayBasedStack() {
-		this.topPointer = 0;
+		this.topPointer = -1;
 		this.elements = (E[])new Object[10];
 	}
 	
@@ -28,13 +26,13 @@ public class ArrayBasedStack<E> implements Stack<E> {
 			}
 			elements =newArray;
 		}
-		elements[topPointer] = element;
 		topPointer++;
+		elements[topPointer] = element;
 	}
 
 	@Override
 	public void pop() {
-		if(topPointer!=0) {
+		if(!isEmpty()) {
 			topPointer--;
 			if(topPointer < elements.length/2 - elements.length/4) {
 				E[] newArray = (E[])new Object[ elements.length/2];
@@ -48,8 +46,8 @@ public class ArrayBasedStack<E> implements Stack<E> {
 
 	@Override
 	public E peek() {
-		if (topPointer>0) {
-			return elements[topPointer-1];
+		if (!isEmpty()) {
+			return elements[topPointer];
 		}
 		else {
 			return null;
@@ -58,13 +56,12 @@ public class ArrayBasedStack<E> implements Stack<E> {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return topPointer;
+		return topPointer+1;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return  topPointer==0;
+		return  topPointer==-1;
 	}
 	
 	@Override

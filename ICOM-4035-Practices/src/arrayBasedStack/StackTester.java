@@ -77,7 +77,7 @@ public class StackTester {
 		System.out.println("---------- ArrayBasedStack ----------");
 		E[] elements = (E[]) aStack.getElements();
 		for (int i=aStack.size()-1; i >=0; i--) {
-			System.out.println(i+"- " + elements[i].toString());
+			System.out.println("- " + elements[i].toString());
 		}
 		System.out.println("---------- ArrayBasedStack ----------");
 		System.out.println();
