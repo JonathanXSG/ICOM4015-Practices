@@ -33,6 +33,7 @@ public class ArrayBasedStack<E> implements Stack<E> {
 	@Override
 	public void pop() {
 		if(!isEmpty()) {
+			elements[topPointer] = null;
 			topPointer--;
 			if(topPointer < elements.length/2 - elements.length/4) {
 				E[] newArray = (E[])new Object[ elements.length/2];
