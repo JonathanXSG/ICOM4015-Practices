@@ -44,24 +44,20 @@ public class MathExpressionsTester {
 					string.push(c[i]+"");
 				}
 			}
-			else if(isOperator(c[i])>2) {
-				if(!string.isEmpty()) {
-					number=Integer.valueOf(string.peek());
-					string.pop();
-					string.push(doOperation(number,c[i],Character.getNumericValue(c[i+1]))+"");
-					i++;
+			else if(!string.isEmpty() && isOperator(string.peek().charAt(string.peek().length()-1))==0) {
+				if(isOperator(c[i])>2) {
+						number=Integer.valueOf(string.peek());
+						string.pop();
+						string.push(doOperation(number,c[i],Character.getNumericValue(c[i+1]))+"");
+						i++;
 				}
-				else throw new Exception("Invalid Math Expression");
+				else if(isOperator(c[i])>0 && isOperator(c[i])<3) {
+						solvePrevious();
+						string.push(c[i]+"");
+				}
 			}
-			else if(isOperator(c[i])>0 && isOperator(c[i])<3) {
-				if(!string.isEmpty()) {
-					solvePrevious();
-					string.push(c[i]+"");
-				}
-				else if(isOperator(c[i])==2) {
-					string.push(c[i]+"");
-				}
-				else throw new Exception("Invalid Math Expression");
+			else if(string.isEmpty() && isOperator(c[i])==2) {
+				string.push(c[i]+"");
 			}
 			else throw new Exception("Invalid Math Expression");
 		}
